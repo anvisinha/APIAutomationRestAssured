@@ -1,0 +1,46 @@
+stages:
+  - build
+  - test
+  - clean
+  - deploy
+
+building:
+  image: alpine
+  stage: build
+  script:
+    - echo "Running a API Automation Code"
+    - mkdir tests
+    - cd tests
+    - touch README.md
+    - echo "Test" >> README.md
+    - cat README.md
+  artifacts:
+    paths:
+      - tests
+
+testing:
+  image: alpine
+  stage: test
+  script:
+    - cd tests
+    - cat README.md
+
+
+
+clean build:
+  image: maven:3.8-openjdk-11
+  stage: clean
+  script:
+    - mvn clean
+
+run api test:
+  image: maven:3.8-openjdk-11
+  stage: build
+  script:
+    - mvn test -Dsurefire.suiteXmlFiles=testng.xml
+  artifacts:
+    paths:
+      - allure-results
+
+
+
